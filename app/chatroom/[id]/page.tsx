@@ -52,15 +52,31 @@ export default function ChatroomPage() {
   const messagesTopRef = useRef<HTMLDivElement | null>(null);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
-  // On mount, load initial dummy messages with skeleton
+  // On mount, load initial dummy messages with skeleton and setup theme
   useEffect(() => {
     setInitialLoading(true);
     setTimeout(() => {
       setAllMessages(generateDummyMessages(40)); // 40 dummy messages for demo
       setInitialLoading(false);
     }, 1200); // Simulate loading delay
+
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+    
+    setIsDark(shouldBeDark);
+    document.documentElement.classList.toggle('dark', shouldBeDark);
   }, []);
+
+  const toggleDarkMode = () => {
+    const newIsDark = !isDark;
+    setIsDark(newIsDark);
+    document.documentElement.classList.toggle('dark', newIsDark);
+    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+  };
 
   // Paginate messages: show only the latest (page * PAGE_SIZE)
   const paginatedMessages = allMessages.slice(-page * PAGE_SIZE);
@@ -149,9 +165,24 @@ export default function ChatroomPage() {
             ← Gemini Chat
           </Link>
           <div className="nav-actions">
-            <h1 className="text-lg font-medium" style={{ color: 'var(--primary-text)' }}>
+            <h1 className="text-lg font-medium mr-4" style={{ color: 'var(--primary-text)' }}>
               Conversation {id}
             </h1>
+            <button
+              onClick={toggleDarkMode}
+              className="dark-mode-toggle"
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                {isDark ? (
+                  // Sun icon for light mode
+                  <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
+                ) : (
+                  // Moon icon for dark mode
+                  <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+                )}
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -159,7 +190,7 @@ export default function ChatroomPage() {
       {/* Chat Container */}
       <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full p-4">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto mb-6 space-y-6" style={{ minHeight: '400px' }}>
+        <div className="flex-1 overflow-y-auto mb-6 space-y-6" style={{ minHeight: '200px', marginLeft: '400px' }}>
           <div ref={messagesTopRef} />
           
           {initialLoading
@@ -176,14 +207,6 @@ export default function ChatroomPage() {
             paginatedMessages.map((msg) => (
               <div key={msg.id} className={`message ${msg.sender === "user" ? "message-user" : "message-ai"}`}>
                 <div className="flex items-start space-x-3">
-                  {msg.sender === "ai" && (
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--gemini-gradient)' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                      </svg>
-                    </div>
-                  )}
-                  
                   <div className="flex-1 min-w-0">
                     <div 
                       className={`message-content ${msg.sender === "user" ? "ml-auto" : "mr-auto"}`}
@@ -239,9 +262,7 @@ export default function ChatroomPage() {
             <div className="message message-ai">
               <div className="flex items-start space-x-3">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse" style={{ background: 'var(--gemini-gradient)' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
+                  {/* Icon removed */}
                 </div>
                 <div className="message-content">
                   <div className="flex space-x-1">
@@ -258,7 +279,7 @@ export default function ChatroomPage() {
         </div>
 
         {/* Input Area */}
-        <div className="card">
+        <div className="card" style={{ marginLeft: '400px', marginRight: 'auto'}}>
           <form onSubmit={handleSubmit} className="flex items-end space-x-3">
             {/* Image Preview */}
             {image && (
@@ -289,7 +310,7 @@ export default function ChatroomPage() {
                 onChange={handleImageChange}
                 disabled={aiTyping}
               />
-              <div className="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <div className="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style={{ marginBottom: '10px', marginRight: '10px'}}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                   <circle cx="9" cy="9" r="2"></circle>

@@ -9,11 +9,7 @@ export default function Home() {
     >
       <div className="text-center max-w-2xl mx-auto animate-fade-in">
         {/* Logo */}
-        <div className="w-24 h-24 mx-auto mb-8 rounded-full flex items-center justify-center" style={{ background: 'var(--gemini-gradient)' }}>
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-        </div>
+        
 
         {/* Title */}
         <h1 className="text-5xl font-light mb-4" style={{ color: 'var(--primary-text)' }}>
@@ -59,9 +55,7 @@ export default function Home() {
 
           <div className="card text-center">
             <div className="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ background: 'var(--active-bg)' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-              </svg>
+              {/* Icon removed */}
             </div>
             <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--primary-text)' }}>
               Creative Assistant
@@ -74,12 +68,7 @@ export default function Home() {
 
         {/* CTA Buttons */}
         <div className="space-y-4">
-          <Link href="/auth" className="btn btn-primary inline-flex items-center">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-2">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10,17 15,12 10,7"></polyline>
-              <line x1="15" y1="12" x2="3" y2="12"></line>
-            </svg>
+          <Link href="/auth" className="btn btn-primary inline-flex items-center" style={{ marginTop: '12px', marginBottom: '12px' }}>
             Get Started
           </Link>
           
@@ -95,11 +84,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-        <p className="text-sm" style={{ color: 'var(--tertiary-text)' }}>
-          Powered by Google Gemini AI
-        </p>
-      </div>
+      
     </main>
   );
 }

@@ -123,11 +123,6 @@ export default function AuthPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ background: 'var(--gemini-gradient)' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-          </div>
           <h1 className="text-3xl font-light mb-2" style={{ color: 'var(--primary-text)' }}>
             Welcome to <span className="gradient-text">Gemini</span>
           </h1>
@@ -190,7 +185,8 @@ export default function AuthPage() {
                   style={{
                     background: 'var(--secondary-bg)',
                     borderColor: 'var(--border-color)',
-                    color: 'var(--primary-text)'
+                    color: 'var(--primary-text)',
+                    marginBottom: '15px'
                   }}
                   placeholder="Enter phone number"
                   maxLength={15}
@@ -222,12 +218,7 @@ export default function AuthPage() {
           {step === "otp" && (
             <form onSubmit={handleSubmitOtp(onSubmitOtp)} className="space-y-6">
               <div className="text-center mb-6">
-                <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ background: 'var(--active-bg)' }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                  </svg>
-                </div>
+               
                 <h2 className="text-xl font-medium mb-2" style={{ color: 'var(--primary-text)' }}>
                   Verify your phone
                 </h2>
@@ -270,6 +261,7 @@ export default function AuthPage() {
               <button
                 type="submit"
                 className="btn btn-primary w-full"
+                style={{ marginTop: '20px' }}
               >
                 Verify Code
               </button>
@@ -290,11 +282,7 @@ export default function AuthPage() {
 
           {step === "success" && (
             <div className="text-center space-y-6 animate-fade-in">
-              <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" style={{ background: 'var(--success-text)' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <polyline points="20,6 9,17 4,12"></polyline>
-                </svg>
-              </div>
+              
               <div>
                 <h2 className="text-xl font-medium mb-2" style={{ color: 'var(--primary-text)' }}>
                   Welcome back!
