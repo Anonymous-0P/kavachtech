@@ -3,7 +3,7 @@
 A modern, responsive chat application built with Next.js 15 that replicates Google Gemini's interface and user experience. Features real-time conversations, dark mode support, infinite scroll, and a beautiful Google Gemini-inspired design system.
 
 ## 🌟 Live Demo
-> Add your live deployment link here
+>(https://kavakatech.vercel.app/)
 
 ## 📋 Project Overview
 
