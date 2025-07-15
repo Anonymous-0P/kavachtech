@@ -161,12 +161,14 @@ export default function ChatroomPage() {
       {/* Header */}
       <div className="nav">
         <div className="nav-content">
-          <Link href="/dashboard" className="nav-brand">
-            ← Gemini Chat
+          <Link href="/dashboard" className="nav-brand truncate">
+            <span className="hidden sm:inline">← Gemini Chat</span>
+            <span className="sm:hidden">← Back</span>
           </Link>
           <div className="nav-actions">
-            <h1 className="text-lg font-medium mr-4" style={{ color: 'var(--primary-text)' }}>
-              Conversation {id}
+            <h1 className="text-sm sm:text-lg font-medium mr-2 sm:mr-4 truncate" style={{ color: 'var(--primary-text)' }}>
+              <span className="hidden sm:inline">Conversation {id}</span>
+              <span className="sm:hidden">Chat</span>
             </h1>
             <button
               onClick={toggleDarkMode}
@@ -188,9 +190,9 @@ export default function ChatroomPage() {
       </div>
 
       {/* Chat Container */}
-      <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full p-4">
+      <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full p-2 sm:p-4 lg:p-6">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto mb-6 space-y-6" style={{ minHeight: '200px', marginLeft: '400px' }}>
+        <div className="flex-1 overflow-y-auto mb-4 sm:mb-6 space-y-4 sm:space-y-6" style={{ minHeight: '200px' }}>
           <div ref={messagesTopRef} />
           
           {initialLoading
@@ -206,19 +208,27 @@ export default function ChatroomPage() {
           {!initialLoading &&
             paginatedMessages.map((msg) => (
               <div key={msg.id} className={`message ${msg.sender === "user" ? "message-user" : "message-ai"}`}>
-                <div className="flex items-start space-x-3">
+                <div className="flex items-start space-x-2 sm:space-x-3">
+                  {msg.sender === "ai" && (
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--gemini-gradient)' }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white" className="sm:w-4 sm:h-4">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    </div>
+                  )}
+                  
                   <div className="flex-1 min-w-0">
                     <div 
-                      className={`message-content ${msg.sender === "user" ? "ml-auto" : "mr-auto"}`}
+                      className={`message-content ${msg.sender === "user" ? "ml-auto" : "mr-auto"} max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl`}
                       onMouseEnter={() => setHoveredMsg(msg.id)}
                       onMouseLeave={() => setHoveredMsg(null)}
                     >
-                      {msg.text && <div className="whitespace-pre-wrap">{msg.text}</div>}
+                      {msg.text && <div className="whitespace-pre-wrap break-words">{msg.text}</div>}
                       {msg.image && (
                         <img
                           src={msg.image}
                           alt="uploaded"
-                          className="mt-2 rounded-lg max-w-full max-h-60 border"
+                          className="mt-2 rounded-lg max-w-full max-h-48 sm:max-h-60 border object-contain"
                           style={{ borderColor: 'var(--border-color)' }}
                         />
                       )}
@@ -226,14 +236,14 @@ export default function ChatroomPage() {
                       {(msg.text || msg.image) && hoveredMsg === msg.id && (
                         <button
                           onClick={() => handleCopy(msg)}
-                          className="absolute top-2 right-2 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="absolute top-2 right-2 p-1 sm:p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                           style={{ 
                             background: 'var(--secondary-bg)',
                             color: 'var(--primary-text)'
                           }}
                           title="Copy to clipboard"
                         >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="sm:w-4 sm:h-4">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                           </svg>
@@ -241,14 +251,14 @@ export default function ChatroomPage() {
                       )}
                     </div>
                     
-                    <div className={`message-time ${msg.sender === "user" ? "text-right" : "text-left"}`}>
+                    <div className={`message-time ${msg.sender === "user" ? "text-right" : "text-left"} text-xs sm:text-sm`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </div>
                   </div>
                   
                   {msg.sender === "user" && (
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--accent-text)' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--accent-text)' }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white" className="sm:w-4 sm:h-4">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                       </svg>
@@ -260,15 +270,15 @@ export default function ChatroomPage() {
           
           {aiTyping && !initialLoading && (
             <div className="message message-ai">
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse" style={{ background: 'var(--gemini-gradient)' }}>
+              <div className="flex items-start space-x-2 sm:space-x-3">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 animate-pulse" style={{ background: 'var(--gemini-gradient)' }}>
                   {/* Icon removed */}
                 </div>
                 <div className="message-content">
                   <div className="flex space-x-1">
-                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--secondary-text)' }}></div>
-                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--secondary-text)', animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--secondary-text)', animationDelay: '0.4s' }}></div>
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-pulse" style={{ background: 'var(--secondary-text)' }}></div>
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-pulse" style={{ background: 'var(--secondary-text)', animationDelay: '0.2s' }}></div>
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-pulse" style={{ background: 'var(--secondary-text)', animationDelay: '0.4s' }}></div>
                   </div>
                 </div>
               </div>
@@ -279,11 +289,11 @@ export default function ChatroomPage() {
         </div>
 
         {/* Input Area */}
-        <div className="card" style={{ marginLeft: '400px', marginRight: 'auto'}}>
-          <form onSubmit={handleSubmit} className="flex items-end space-x-3">
+        <div className="card">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-end space-y-3 sm:space-y-0 sm:space-x-3">
             {/* Image Preview */}
             {image && (
-              <div className="relative">
+              <div className="relative flex justify-center sm:justify-start">
                 <img
                   src={image}
                   alt="preview"
@@ -301,59 +311,62 @@ export default function ChatroomPage() {
               </div>
             )}
             
-            {/* File Upload */}
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageChange}
-                disabled={aiTyping}
-              />
-              <div className="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style={{ marginBottom: '10px', marginRight: '10px'}}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="9" cy="9" r="2"></circle>
-                  <path d="M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-                </svg>
-              </div>
-            </label>
-            
-            {/* Text Input */}
-            <div className="flex-1 relative">
-              <input
-                className="input pr-12"
-                style={{
-                  background: 'var(--secondary-bg)',
-                  borderColor: 'var(--border-color)',
-                  color: 'var(--primary-text)'
-                }}
-                placeholder="Ask Gemini..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                disabled={aiTyping}
-              />
+            {/* File Upload and Text Input Container */}
+            <div className="flex items-end space-x-3 w-full">
+              {/* File Upload */}
+              <label className="cursor-pointer flex-shrink-0">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                  disabled={aiTyping}
+                />
+                <div className="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="9" cy="9" r="2"></circle>
+                    <path d="M21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                  </svg>
+                </div>
+              </label>
               
-              {/* Send Button */}
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-colors"
-                style={{
-                  background: input.trim() || image ? 'var(--accent-text)' : 'var(--secondary-bg)',
-                  color: input.trim() || image ? 'white' : 'var(--tertiary-text)'
-                }}
-                disabled={aiTyping || (!input.trim() && !image)}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
-                </svg>
-              </button>
+              {/* Text Input */}
+              <div className="flex-1 relative">
+                <input
+                  className="input pr-12 w-full"
+                  style={{
+                    background: 'var(--secondary-bg)',
+                    borderColor: 'var(--border-color)',
+                    color: 'var(--primary-text)'
+                  }}
+                  placeholder="Ask Gemini..."
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={aiTyping}
+                />
+                
+                {/* Send Button */}
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-colors"
+                  style={{
+                    background: input.trim() || image ? 'var(--accent-text)' : 'var(--secondary-bg)',
+                    color: input.trim() || image ? 'white' : 'var(--tertiary-text)'
+                  }}
+                  disabled={aiTyping || (!input.trim() && !image)}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                  </svg>
+                </button>
+              </div>
             </div>
           </form>
           
           {/* Footer */}
-          <div className="mt-3 text-center">
+          <div className="mt-3 text-center px-2">
             <p className="text-xs" style={{ color: 'var(--tertiary-text)' }}>
               Gemini may display inaccurate info, including about people, so double-check its responses.
             </p>
